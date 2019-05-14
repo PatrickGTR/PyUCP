@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+<title>Login</title>
+{% endblock %}
+
+{% block body %}       
+    <div class="container justify-content-center">
+        
+        <form action="" method="POST">
+            <h6>Username</h6>
+            <div class="form-group">
+                <input type="text" name="username" class="form-control" placeholder="username" required>
+            </div>
+            <h6>Password</h6>
+            <div class="form-group">
+                <input type="password" name="password" class="form-control" placeholder="password" required>
+            </div>
+            <div class="checkbox">
+                <label><input type="checkbox" name="checkbox"/>Remember me</label>
+            </div>
+            <button class="btn btn-primary" type="submit">Login</button>
+        </form>
+    </div>
+
+{% endblock %}
