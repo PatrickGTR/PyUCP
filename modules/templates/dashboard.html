@@ -6,34 +6,45 @@
 
 {% block content %}
 
-<div class="col-auto">
-    <table class="table table-striped">
-    <h4 class="p-3">Account Statistics</h4>
-        <tr>
-            <td>AccountID:</td>
-            <td>{{ results[0] }}</td>
-        </tr>
-        <tr>
-            <td>Username:</td>
-            <td>{{ results[1] }}</td>
-        </tr>
-        <tr>
-            <td>Money:</td>
-            <td>{{ results[2] }}</td>
-        </tr>
-        <tr>
-            <td>Kills:</td>
-            <td>{{ results[3] }}</td>
-        </tr>
-        <tr>
-            <td>Deaths:</td>
-            <td>{{ results[4] }}</td>
-        </tr>
-        <tr>
-            <td>Job:</td>
-            <td>{{ jobName }}</td>
-        </tr>
-    </table>
+<div class="card my-4">
+    <h5 class="card-header bg-dark text-white">Your Statistics</h5>
+    <div class="card-body">
+        <table class="table table-striped">
+            <tr>
+                <td>AccountID:</td>
+                <td>{{ results['accountID'] }}</td>
+            </tr>
+            <tr>
+                <td>Username:</td>
+                <td>{{ results['username'] }}</td>
+            </tr>
+            <tr>
+                <td>Register Date</td>
+                <td>{{ results['reg_date'] }}</td>
+            </tr>
+            <tr>
+                <td>Last Login</td>
+                <td>{{ results['last_log'] }}</td>
+            </tr>
+            <tr>
+                <td>Money:</td>
+                <td>${{ results['money'] }}</td>
+            </tr>
+            <tr>
+                <td>Kills:</td>
+                <td>{{ results['kills'] }}</td>
+            </tr>
+            <tr>
+                <td>Deaths:</td>
+                <td>{{ results['deaths'] }}</td>
+            </tr>
+            <tr>
+                <td>Job:</td>
+                <td>{{ jobName }}</td>
+            </tr>
+        </table>
+    </div>
 </div>
+
 
 {% endblock %}
