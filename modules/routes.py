@@ -18,7 +18,7 @@ def index():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    with connect_sql.sqlcursor() as c:
+    with connect_sql.mysql() as c:
         c.execute("SELECT password, hash FROM accounts WHERE username=%s", username)
         results = c.fetchone()
 
@@ -45,7 +45,7 @@ def index():
 
 @app.route('/dashboard/<username>', methods=["GET", "POST"])
 def dashboard(username):
-    with connect_sql.sqlcursor() as c:
+    with connect_sql.mysql() as c:
         c.execute("SELECT accountID, username, money, kills, deaths, jobID, score, experience, wantedlevel,  \
             DATE_FORMAT(registerdate, '%%d %%M %%Y') as reg_date, \
             DATE_FORMAT(lastlogin, '%%d, %%M, %%Y at %%r') as last_log \
