@@ -1,46 +1,123 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="//netdna.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
     {% block title %}
     {% endblock %}
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 </head>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" style="color:white">Navbar</a>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
-                    </li>
-                </ul>
-            </div>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    {% if not session.logged_in%}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
-                    </li>
-                    {% endif %}
-                    {% if session.logged_in %}
-                    <li class="nav-item">
-                            <a class="nav-link" href="/dashboard/{{ session.get('username') }}">Dashboard</a>
-                        </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </div>
-        </nav>
-        {% include "includes/messages.html" %}
+<body>
+{% include "includes/navbar.html" %}
+{% include "includes/messages.html" %}
 
-        {% block body %}
-        {% endblock %}
-    </body>
+<!-- Page Content start -->
+<div class="container">
+    <div class="row">
+        <!-- Post Content Column start-->
+        <div class="col-lg-8">
+           {% block content %}
+
+           {% endblock %}
+        </div>
+        <!-- Post Content Column end-->
+        <!-- Sidebar start -->
+        <div class="col-md-4">
+            <!-- Account Authentication start -->
+            {% if not session.get('logged_in') %}
+            <div class="card my-4">
+                <h5 class="card-header bg-dark text-white">Account</h5>
+                <div class="card-body">
+                    <form action="" method="POST">
+                        <!-- Username start -->
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text "><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" name="username" class="form-control" placeholder="Username" required>
+                        </div>
+                        <!-- Username end -->
+                        <!-- Password start -->
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text "><i class="fas fa-key"></i></span>
+                            </div>
+                            <input type="password" name="password" class="form-control" placeholder="Password" required>
+                        </div>
+                        <!-- Password end -->
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="checkbox"/> Remember me</label>
+                        </div>
+                        <button class="btn btn-dark" type="submit">Log in</button>
+                        <button class="btn btn-dark" type="submit">Forgot Password</button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+            <!-- Account Authentication end -->
+            <!-- Social Media -->
+            <div class="card my-4">
+                <h5 class="card-header bg-dark text-white">Social Media</h5>
+                <div class="card-body text-center">
+                    <a style="padding:2px" class="fab fa-facebook-square fa-3x text-dark"></a>
+                    <a style="padding:2px" class="fab fa-twitter-square fa-3x text-dark"></a>
+                    <a style="padding:2px" class="fab fa-steam-square fa-3x text-dark"></a>
+                </div>
+            </div>
+            <!-- Social Media End -->
+            <!-- Server Information -->
+            <div class="card my-4">
+                <h5 class="card-header bg-dark text-white">Server Administrators</h5>
+                <div class="card-body text-center">
+                    <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Level</th>
+                            <th>Username</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>5</td>
+                            <td>PatrickGTR</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Server Information End -->
+        </div>
+        <!-- Sidebar end -->
+    </div>
+</div>
+<!-- Page Content start -->
+
+<footer class="bg-dark text-white">
+    <div class="footer-copyright text-center py-3" id="footer">
+        Copyright © Project Open 2019
+    </div>
+</footer>
+
+<!-- Bootstrap core JavaScript -->
+<script src="{{ url_for('static', filename='jquery/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+<script>
+    $('.alert').delay(2500).fadeOut(300);
+</script>
+    
+
+</body>
 </html>

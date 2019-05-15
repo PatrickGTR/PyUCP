@@ -4,20 +4,16 @@ import hashlib
 
 from modules import app,mysql
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("index.html")
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
     
     if session.get('remember_me'):
         session['logged_in'] = True
         username = session['username']
-        return redirect(url_for('dashboard', username=username))
+        return render_template("index.html")
 
     if request.method != "POST":
-        return render_template("login.html")
+        return render_template("index.html")
 
     username = request.form.get('username')
     password = request.form.get('password')
@@ -30,14 +26,14 @@ def login():
 
     if not results:
         flash("Invalid password or username, please try again.", "danger")
-        return render_template("login.html")
+        return render_template("index.html")
 
     retPassword, retSalt = results
     password = hashlib.sha256(password.encode() + retSalt.encode()).hexdigest()
 
     if password.upper() != retPassword:
         flash("Wrong password, please try again.", "danger")
-        return render_template("login.html")
+        return render_template("index.html")
 
     if request.form.get("checkbox"):
         session["remember_me"] = True
@@ -46,8 +42,7 @@ def login():
     session['username'] = username
     flash("Successfully logged in", "success")
     
-
-    return redirect(url_for('dashboard', username=username))
+    return redirect(url_for('index'))
 
 @app.route('/dashboard/<username>', methods=["GET", "POST"])
 def dashboard(username):
@@ -85,4 +80,4 @@ def dashboard(username):
 def logout():
     session.clear()
     flash("You have successfully logged out", "success")
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))

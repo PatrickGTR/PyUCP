@@ -4,38 +4,36 @@
 <title>Dashboard</title>
 {% endblock %}
 
-{% block body %}
+{% block content %}
 
-<div class="row justify-content-center">
-    <div class="col-auto">
-        <table class="table table-striped table-dark">
-        <h4>Account Statistics</h4>
-            <tr>
-                <td>AccountID:</td>
-                <td>{{ results[0] }}</td>
-            </tr>
-            <tr>
-                <td>Username:</td>
-                <td>{{ results[1] }}</td>
-            </tr>
-            <tr>
-                <td>Money:</td>
-                <td>{{ results[2] }}</td>
-            </tr>
-            <tr>
-                <td>Kills:</td>
-                <td>{{ results[3] }}</td>
-            </tr>
-            <tr>
-                <td>Deaths:</td>
-                <td>{{ results[4] }}</td>
-            </tr>
-            <tr>
-                <td>Job:</td>
-                <td>{{ jobName }}</td>
-            </tr>
-        </table>
-    </div>
+<div class="col-auto">
+    <table class="table table-striped">
+    <h4 class="p-3">Account Statistics</h4>
+        <tr>
+            <td>AccountID:</td>
+            <td>{{ results[0] }}</td>
+        </tr>
+        <tr>
+            <td>Username:</td>
+            <td>{{ results[1] }}</td>
+        </tr>
+        <tr>
+            <td>Money:</td>
+            <td>{{ results[2] }}</td>
+        </tr>
+        <tr>
+            <td>Kills:</td>
+            <td>{{ results[3] }}</td>
+        </tr>
+        <tr>
+            <td>Deaths:</td>
+            <td>{{ results[4] }}</td>
+        </tr>
+        <tr>
+            <td>Job:</td>
+            <td>{{ jobName }}</td>
+        </tr>
+    </table>
 </div>
 
 {% endblock %}
