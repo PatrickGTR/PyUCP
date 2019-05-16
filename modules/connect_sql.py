@@ -1,11 +1,13 @@
 import pymysql
 
-class mysql():
+from modules import config
+
+class MySQL():
     def __enter__(self):
-        self.conn = pymysql.connect(host="localhost",
-                                user="root",
-                                passwd="",
-                                db="cnr",
+        self.conn = pymysql.connect(host=config.Config.MYSQL_HOST,
+                                user=config.Config.MYSQL_USERNAME,
+                                passwd=config.Config.MYSQL_PASSWORD,
+                                db=config.Config.MYSQL_DATABASE,
                                 autocommit=True,
                                 cursorclass=pymysql.cursors.DictCursor)
         self.cursor = self.conn.cursor()

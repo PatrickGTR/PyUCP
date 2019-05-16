@@ -1,0 +1,21 @@
+<div class="card my-4">
+    <h5 class="card-header bg-dark text-white">Server Administrators</h5>
+    <div class="card-body text-center">
+        <table class="table">
+        <thead>
+            <tr>
+                <th>Level</th>
+                <th>Username</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for adminData in admins %}
+            <tr>
+                <td>{{  retrieveNameFromID(adminData['userID']) }}</td>
+                <td>{{ adminData['adminLevel'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
