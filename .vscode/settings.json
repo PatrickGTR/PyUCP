@@ -1,5 +1,6 @@
 {
     "files.exclude": {
         "**/__pycache__": true
-    }
+    },
+    "python.pythonPath": "C:\\Users\\Patrick\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe"
 }

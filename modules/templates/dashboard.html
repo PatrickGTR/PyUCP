@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block title %}
-<title>Dashboard</title>
+<title>Project Open - Dashboard</title>
 {% endblock %}
 
 {% block content %}
@@ -12,39 +12,77 @@
         <table class="table table-striped">
             <tr>
                 <td>AccountID:</td>
-                <td>{{ results['accountID'] }}</td>
+                <td>{{ account.accountID }}</td>
             </tr>
             <tr>
                 <td>Username:</td>
-                <td>{{ results['username'] }}</td>
+                <td>{{ account.username }}</td>
             </tr>
             <tr>
                 <td>Register Date</td>
-                <td>{{ results['reg_date'] }}</td>
+                <td>{{ account.reg_date}}</td>
             </tr>
             <tr>
                 <td>Last Login</td>
-                <td>{{ results['last_log'] }}</td>
+                <td>{{ account.last_log }}</td>
             </tr>
             <tr>
                 <td>Money:</td>
-                <td>${{ results['money'] }}</td>
+                <td>${{ account.money }}</td>
             </tr>
             <tr>
                 <td>Kills:</td>
-                <td>{{ results['kills'] }}</td>
+                <td>{{ account.kills }}</td>
             </tr>
             <tr>
                 <td>Deaths:</td>
-                <td>{{ results['deaths'] }}</td>
+                <td>{{ account.deaths }}</td>
             </tr>
             <tr>
                 <td>Job:</td>
-                <td>{{ jobName }}</td>
+                <td>{{ getJobName(account.jobID) }}</td>
             </tr>
         </table>
     </div>
 </div>
+<div class="card my-4">
+    <h5 class="card-header bg-dark text-white">Skills</h5>
+    <div class="card-body">
+        <table class="table table-striped">
+            {% for skills in skill %}
+            <tr>
+                <td>{{ getSkillName(skills.skill_id) }}:</td>
+                {% if skills.value == None %}
+                    <td>0</td>
+                {% else %}
+                    <td>{{ skills.value }}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+<div class="card my-4">
+        <h5 class="card-header bg-dark text-white">Skills</h5>
+        <div class="card-body">
+            <table class="table text-center table-bordered">
 
+                <thead>
+                    {% for items in item %}
+                        <th>{{ getItemName(items.item_id) }}</th>
+                    {% endfor %}
+                </thead>
+                <tr>
+                    {% for items in item %}
+                        {% if items.value == None %}
+                            <td>0</td>
+                        {% else %}
+                            <td>{{ items.value }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            </table>
+        </div>
+    </div>
 
 {% endblock %}
