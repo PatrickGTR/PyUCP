@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}
+<title>Project Open - Writing Content</title>
+{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('write_success') }}" method="POST">
+    <div class="card my-4">
+        <h5 class="card-header bg-dark text-white">Enter Title</h5>
+        <input class="text-center" placeholder="Title" type="text" name="news_title" required/>
+
+        <br>
+        <br>
+
+        <h5 class="card-header bg-dark text-white">Enter Content</h5>
+        <textarea id="summernote" name="news_message" required></textarea>
+        <button class="btn btn-dark" type="submit">Post Content</button>
+    </div>
+</form>
+{% endblock %}

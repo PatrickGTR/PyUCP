@@ -52,11 +52,7 @@
             {% for skills in skill %}
             <tr>
                 <td>{{ getSkillName(skills.skill_id) }}:</td>
-                {% if skills.value == None %}
-                    <td>0</td>
-                {% else %}
-                    <td>{{ skills.value }}</td>
-                {% endif %}
+                <td>{{ skills.value }}</td>
             </tr>
             {% endfor %}
         </table>
@@ -74,15 +70,10 @@
                 </thead>
                 <tr>
                     {% for items in item %}
-                        {% if items.value == None %}
-                            <td>0</td>
-                        {% else %}
-                            <td>{{ items.value }}</td>
-                        {% endif %}
+                        <td>{{ items.value }}</td>
                     {% endfor %}
                 </tr>
             </table>
         </div>
     </div>
-
 {% endblock %}

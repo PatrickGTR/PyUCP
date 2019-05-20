@@ -1,4 +1,7 @@
 
+
+from flask import session
+
 from modules import (
     app, 
     connect_sql
@@ -50,8 +53,8 @@ def retrieveNameFromID(accountid):
 @app.template_global()
 def getJobName(jobid):
     jobName = account_data.get("jobs").get(jobid)
-
     return jobName
+
 @app.template_global()
 def getSkillName(skillid):
     skillName = account_data.get("skills").get(skillid)
@@ -68,4 +71,11 @@ def retrieveAdmins():
         c.execute("SELECT userID, adminLevel FROM admins")
         results = c.fetchall()
     return results
+    
+@app.template_global()
+def isPlayerLoggedIn():
+    if(session.get('logged_in') is None):
+        return False
+    else:
+        return True
 

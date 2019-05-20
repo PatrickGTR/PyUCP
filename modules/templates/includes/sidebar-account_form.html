@@ -1,0 +1,30 @@
+{% if(not isPlayerLoggedIn()) %}
+<div class="card my-4">
+    <h5 class="card-header bg-dark text-white">Account</h5>
+    <div class="card-body">
+        <form action="" method="POST">
+            <!-- Username start -->
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text "><i class="fas fa-user"></i></span>
+                </div>
+                <input type="text" name="username" class="form-control" placeholder="Username" required>
+            </div>
+            <!-- Username end -->
+            <!-- Password start -->
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text "><i class="fas fa-key"></i></span>
+                </div>
+                <input type="password" name="password" class="form-control" placeholder="Password" required>
+            </div>
+            <!-- Password end -->
+            <div class="checkbox">
+                <label><input type="checkbox" name="checkbox"/> Remember me</label>
+            </div>
+            <button class="btn btn-dark" type="submit">Log in</button>
+            <button class="btn btn-dark" type="submit">Forgot Password</button>
+        </form>
+    </div>
+</div>
+{% endif %}

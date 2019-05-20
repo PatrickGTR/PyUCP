@@ -1,17 +1,27 @@
-body {
-  padding-top: 56px;
-}
-
-#footer {
-  position: fixed;
-  width: 100%;
-  bottom: 0;
-  left: 0;
-  background: #343a40;
-}
-
 
 .navbar-current {
   background-color: #212529;
   border-radius: 5pt;
+}
+
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin: 0 0 100px;
+  /* bottom = footer height */
+  padding: 25px;
+}
+
+footer {
+  background-color: orange;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
+  overflow: hidden;
 }

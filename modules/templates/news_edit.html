@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block title %}
+<title>Project Open - Editing Content</title>
+{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('edit_success', postid=post_data.post_id) }}" method="POST">
+    <div class="card my-4">
+        <h5 class="card-header bg-dark text-white">Enter Title</h5>
+        <input class="text-center" type="text" name="news_title" value="{{ post_data.post_title }}"/>
+        <br>
+        <br>
+
+        <h5 class="card-header bg-dark text-white">Edit Content</h5>
+        <textarea id="summernote" name="news_message" required>{{ post_data.post_content|safe }}</textarea>
+        <button class="btn btn-dark" type="submit">Finish</button>
+    </div>
+</form>
+{% endblock %}

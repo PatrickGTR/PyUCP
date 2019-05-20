@@ -7,15 +7,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-            <a class="nav-link" href="/">Home</a>
+            <li class="nav-item">
+                <a id="home" class="nav-link" href="{{ url_for('home') }}">Home</a>
             </li>
-            {% if session.get('logged_in') %}
+            {% if(isPlayerLoggedIn()) %}
                 <li class="nav-item">
-                <a class="nav-link" href="/dashboard/{{ session.get('username') }}">Dashboard</a>
+                    <a id="dashboard" class="nav-link" href="{{ url_for('dashboard', accountid=session.get('accountid')) }}">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="/logout">Logout</a>
+                    <a id="logout" class="nav-link" href="{{ url_for('logout') }}">Logout</a>
                 </li>
             {% endif %}
         </ul>
