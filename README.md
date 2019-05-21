@@ -5,5 +5,5 @@ Back-end: Python
 
 ![preview]
 
-[preview]: https://media.giphy.com/media/kdWbCt9QlMOJ4VDs4a/source.mp4
+[preview]: https://media.giphy.com/media/kdWbCt9QlMOJ4VDs4a/giphy.gif
 
