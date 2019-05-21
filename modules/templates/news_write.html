@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<form action="{{ url_for('write_success') }}" method="POST">
+<form action="{{ url_for('posts.write_success') }}" method="POST">
     <div class="card my-4">
         <h5 class="card-header bg-dark text-white">Enter Title</h5>
         <input class="text-center" placeholder="Title" type="text" name="news_title" required/>

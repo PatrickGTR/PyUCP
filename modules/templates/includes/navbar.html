@@ -3,7 +3,7 @@
     <div class="container">
         <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
             <ul class="navbar-nav mr-auto">
-                    <a id="home" class="nav-link" href="{{ url_for('home') }}">Home</a>
+                    <a id="home" class="nav-link" href="{{ url_for('main.home') }}">Home</a>
             </ul>
         </div>
 
@@ -20,10 +20,10 @@
             <ul class="navbar-nav ml-auto">
             {% if(isPlayerLoggedIn()) %}
                 <li class="nav-item">
-                    <a id="dashboard" class="nav-link" href="{{ url_for('dashboard', accountid=session.get('accountid')) }}">Dashboard</a>
+                    <a id="dashboard" class="nav-link" href="{{ url_for('main.dashboard', accountid=session.get('accountid')) }}">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a id="logout" class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                    <a id="logout" class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
                 </li>
             {% endif %}
             </ul>

@@ -4,7 +4,8 @@ from flask import (
     request,session,
     url_for,
     redirect,
-    flash
+    flash,
+    Blueprint
 )
 
 from flask_paginate import (
@@ -15,19 +16,20 @@ from flask_paginate import (
 import pymysql
 import hashlib
 
-from modules import app 
 from modules.connect_sql import MySQL 
 from modules.functions import retrieveAdmins, isPlayerLoggedIn
 
-@app.route("/")
-def index():
-    return redirect(url_for("home"))
+main = Blueprint('main', __name__)
 
-@app.route('/home', 
+@main.route("/")
+def index():
+    return redirect(url_for("main.home"))
+
+@main.route('/home', 
     defaults={'page': 1}, 
     methods=["GET", "POST"]
 )
-@app.route("/home/<int:page>", methods=["GET", "POST"])
+@main.route("/home/<int:page>", methods=["GET", "POST"])
 def home(page):
 
     """ Posts """
@@ -37,7 +39,7 @@ def home(page):
         c.fetchall()
         num_rows = c.rowcount
 
-    per_page = app.config.get('PER_PAGE')
+    per_page = 3
     pagination = Pagination(page=1, per_page=per_page, total=num_rows, bs_version=4, alignment="center")
     page, per_page, offset = get_page_args()
                                            
@@ -70,7 +72,7 @@ def home(page):
         # if there is no result returned, we send the user a error message then redirect back to index.html
         if(accResult == None):
             flash("Invalid password or username, please try again.", "danger")
-            return redirect(url_for('home'))
+            return redirect(url_for('main.home'))
 
         # we set retPassword and retSalt variable  to the password and hash we retrieved from the database.
         retPassword, retSalt = accResult["password"], accResult["hash"]
@@ -80,7 +82,7 @@ def home(page):
         # compare password, if password is the same, let the code continue else we return an error message and redirect the user back to index.html
         if password.upper() != retPassword:
             flash("Wrong password, please try again.", "danger")
-            return redirect(url_for('home'))
+            return redirect(url_for('main.home'))
 
         # if user ticked the box, set the 'remember_me' session to true.
         if request.form.get("checkbox"):
@@ -106,7 +108,7 @@ def home(page):
             admins=retrieveAdmins()
         )
 
-@app.route("/dashboard/<int:accountid>", methods=["GET", "POST"])
+@main.route("/dashboard/<int:accountid>", methods=["GET", "POST"])
 def dashboard(accountid):
 
     # retrieve players account data
@@ -155,77 +157,8 @@ def dashboard(accountid):
         admins=retrieveAdmins()
     )
 
-@app.route("/logout")
+@main.route("/logout")
 def logout():
     session.clear()
     flash("You have successfully logged out", "success")
-    return redirect(url_for("index"))
-
-# put into separated module (look onto using flask-blueprint)
-@app.route("/news_write")
-def news_write():
-    # if the user is not signed in and logged in, disallow from accessing this link.
-    if(not isPlayerLoggedIn()):
-        return redirect(url_for('home')) # TODO: Send to 403 instead of home.
-
-    return render_template("news_write.html", 
-        admins=retrieveAdmins()
-    )
-
-@app.route("/news_edit/<int:postid>")
-def news_edit(postid):
-    # if the user is not signed in and logged in, disallow from accessing this link.
-    if(not isPlayerLoggedIn()):
-        return redirect(url_for('home')) # TODO: Send to 403 instead of home.
-
-    with MySQL() as c:
-        c.execute("SELECT post_id, post_title, post_content FROM posts WHERE post_id = %s", postid)
-        result = c.fetchone()
-
-    return render_template("news_edit.html",
-        post_data=result,
-        admins=functions.retrieveAdmins() 
-    )
-
-@app.route("/write_success", methods=["GET", "POST"])
-def write_success():
-    # if the user is not logged in, disallow from accessing this link.
-    if(not functions.isPlayerLoggedIn()):
-        return redirect(url_for('home')) # TODO: Send to 403 instead of home.
-
-    title = request.form.get('news_title') 
-    content = request.form.get('news_message')
-    author = session.get("accountid") 
-
-    with MySQL() as c:
-       c.execute("INSERT INTO posts (post_title, post_content, post_date, author_id) VALUES (%s, %s, NOW(), %s)", (title, content, author))
-
-    flash("You have successfully posted the content", "success")
-    return redirect(url_for('home'))
-
-@app.route("/edit_success/<int:postid>", methods=["GET", "POST"])
-def edit_success(postid):
-    # if the user is not logged in, disallow from accessing this link.
-    if(not functions.isPlayerLoggedIn()):
-        return redirect(url_for('home')) # TODO: Send to 403 instead of home.
-    
-    title = request.form.get('news_title') 
-    content = request.form.get('news_message')
-    flash("You have successfully edited the content", "success")
-
-    with MySQL() as c:
-        c.execute("UPDATE posts SET post_content=%s, post_title=%s WHERE post_id=%s", (content, title, postid))
-
-    return redirect(url_for('home'))
-
-@app.route("/write_delete/<int:postid>", methods=["GET", "POST"])
-def write_delete(postid):
-    # if the user is not logged in, disallow from accessing this link.
-    if(not functions.isPlayerLoggedIn()):
-        return redirect(url_for('home')) # TODO: Send to 403 instead of home.
-        
-    with MySQL() as c:
-        c.execute("DELETE FROM posts WHERE post_id=%s", postid)
-
-    flash("You have successfully deleted the content", "success")
-    return redirect(url_for('index'))
+    return redirect(url_for("main.home"))

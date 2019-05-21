@@ -1,11 +1,11 @@
 
 
-from flask import session
+from flask import session, Blueprint
+import pymysql
 
-from modules import app 
 from modules.connect_sql import MySQL
 
-import pymysql
+funcs = Blueprint('funcs', __name__)
 
 account_data = {
     "jobs": {
@@ -41,36 +41,36 @@ account_data = {
 ## app.template_global allows 
 ## the functions below to be used in our .html files.
 
-@app.template_global()
+@funcs.app_template_global()
 def retrieveNameFromID(accountid):
     with MySQL() as c: 
         c.execute(f"SELECT username FROM accounts WHERE accountid={accountid}")
         result = c.fetchone()
     return result["username"]
 
-@app.template_global()
+@funcs.app_template_global()
 def getJobName(jobid):
     jobName = account_data.get("jobs").get(jobid)
     return jobName
 
-@app.template_global()
+@funcs.app_template_global()
 def getSkillName(skillid):
     skillName = account_data.get("skills").get(skillid)
     return skillName
 
-@app.template_global()
+@funcs.app_template_global()
 def getItemName(itemid):
     itemName = account_data.get("items").get(itemid)
     return itemName
 
-@app.template_global()
+@funcs.app_template_global()
 def retrieveAdmins():
     with MySQL() as c:
         c.execute("SELECT userID, adminLevel FROM admins")
         results = c.fetchall()
     return results
     
-@app.template_global()
+@funcs.app_template_global()
 def isPlayerLoggedIn():
     if(session.get('logged_in') is None):
         return False
