@@ -4,15 +4,16 @@
 
 import pymysql
 
-from modules import config
+from modules.config import Config
 
 class MySQL():
     def __enter__(self):
         try:
-            self.conn = pymysql.connect(host=config.getMySQLHost(),
-                                    user=config.getMySQLUsername(),
-                                    passwd=config.getMySQLPassword(),
-                                    db=config.getMySQLDatabase(),
+            conf = Config()
+            self.conn = pymysql.connect(host=conf.MYSQL_HOST,
+                                    user=conf.MYSQL_USERNAME,
+                                    passwd=conf.MYSQL_PASSWORD,
+                                    db=conf.MYSQL_DATABASE,
                                     autocommit=True,
                                     cursorclass=pymysql.cursors.DictCursor)
         except pymysql.ProgrammingError as err:

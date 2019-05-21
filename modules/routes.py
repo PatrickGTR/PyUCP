@@ -15,11 +15,9 @@ from flask_paginate import (
 import pymysql
 import hashlib
 
-from modules import (
-    app, 
-    connect_sql,
-    functions
-)
+from modules import app 
+from modules.connect_sql import MySQL 
+from modules.functions import retrieveAdmins, isPlayerLoggedIn
 
 @app.route("/")
 def index():
@@ -34,7 +32,7 @@ def home(page):
 
     """ Posts """
 
-    with connect_sql.MySQL() as c:
+    with MySQL() as c:
         c.execute("SELECT * FROM posts")
         c.fetchall()
         num_rows = c.rowcount
@@ -43,7 +41,7 @@ def home(page):
     pagination = Pagination(page=1, per_page=per_page, total=num_rows, bs_version=4, alignment="center")
     page, per_page, offset = get_page_args()
                                            
-    with connect_sql.MySQL() as c:
+    with MySQL() as c:
         c.execute(f"SELECT post_id, post_title, post_content, DATE_FORMAT(post_date, '%d, %M, %Y at %h:%i %p') as post_date, author_id FROM posts ORDER BY post_id DESC LIMIT {offset}, {per_page}")
         result_post = c.fetchall() 
 
@@ -54,7 +52,7 @@ def home(page):
         return render_template("index.html",
             pagination=pagination,
             news=result_post,
-            admins=functions.retrieveAdmins()
+            admins=retrieveAdmins()
         )
 
     # if the method we get is not post, we send the user back to index.html
@@ -65,7 +63,7 @@ def home(page):
         password = request.form.get("password")
 
         # run query, retrieve the accountID, password and hash from username variable.
-        with connect_sql.MySQL() as c:
+        with MySQL() as c:
             c.execute("SELECT accountID, password, hash FROM accounts WHERE username = %s", username)
             accResult = c.fetchone()
 
@@ -89,7 +87,7 @@ def home(page):
             session["remember_me"] = True
         
         # if user logged in, we check in our admin database if they're admin, if they are, set session 'isAdmin' to true
-        with connect_sql.MySQL() as c:
+        with MySQL() as c:
             c.execute("SELECT adminLevel FROM admins WHERE userID = %s", accResult['accountID'])
             admResult = c.fetchone()
 
@@ -105,14 +103,14 @@ def home(page):
     return render_template("index.html",
             pagination=pagination,
             news=result_post,
-            admins=functions.retrieveAdmins()
+            admins=retrieveAdmins()
         )
 
 @app.route("/dashboard/<int:accountid>", methods=["GET", "POST"])
 def dashboard(accountid):
 
     # retrieve players account data
-    with connect_sql.MySQL() as c:
+    with MySQL() as c:
         c.execute(f"SELECT *,  \
             DATE_FORMAT(registerdate, '%d %M %Y') as reg_date, \
             DATE_FORMAT(lastlogin, '%d, %M, %Y at %r') as last_log \
@@ -123,7 +121,7 @@ def dashboard(accountid):
         result_account = c.fetchone()
     
     # retrieve players skill data
-    with connect_sql.MySQL() as c:
+    with MySQL() as c:
         c.execute(f"\
             SELECT \
                 type.skill_id, type.skill_name, IFNULL(skill.value, 0) as value \
@@ -137,7 +135,7 @@ def dashboard(accountid):
         result_skill = c.fetchall()
     
     # retrieve players item data
-    with connect_sql.MySQL() as c:
+    with MySQL() as c:
         c.execute(f"\
             SELECT \
                 type.item_id, type.item_name, IFNULL(item.value, 0) as value \
@@ -154,7 +152,7 @@ def dashboard(accountid):
         item=result_item, 
         skill=result_skill,
         account=result_account, 
-        admins=functions.retrieveAdmins()
+        admins=retrieveAdmins()
     )
 
 @app.route("/logout")
@@ -167,20 +165,20 @@ def logout():
 @app.route("/news_write")
 def news_write():
     # if the user is not signed in and logged in, disallow from accessing this link.
-    if(functions.isPlayerLoggedIn() == 0):
+    if(not isPlayerLoggedIn()):
         return redirect(url_for('home')) # TODO: Send to 403 instead of home.
 
     return render_template("news_write.html", 
-        admins=functions.retrieveAdmins()
+        admins=retrieveAdmins()
     )
 
 @app.route("/news_edit/<int:postid>")
 def news_edit(postid):
     # if the user is not signed in and logged in, disallow from accessing this link.
-    if(not functions.isPlayerLoggedIn()):
+    if(not isPlayerLoggedIn()):
         return redirect(url_for('home')) # TODO: Send to 403 instead of home.
 
-    with connect_sql.MySQL() as c:
+    with MySQL() as c:
         c.execute("SELECT post_id, post_title, post_content FROM posts WHERE post_id = %s", postid)
         result = c.fetchone()
 
@@ -199,7 +197,7 @@ def write_success():
     content = request.form.get('news_message')
     author = session.get("accountid") 
 
-    with connect_sql.MySQL() as c:
+    with MySQL() as c:
        c.execute("INSERT INTO posts (post_title, post_content, post_date, author_id) VALUES (%s, %s, NOW(), %s)", (title, content, author))
 
     flash("You have successfully posted the content", "success")
@@ -215,7 +213,7 @@ def edit_success(postid):
     content = request.form.get('news_message')
     flash("You have successfully edited the content", "success")
 
-    with connect_sql.MySQL() as c:
+    with MySQL() as c:
         c.execute("UPDATE posts SET post_content=%s, post_title=%s WHERE post_id=%s", (content, title, postid))
 
     return redirect(url_for('home'))
@@ -226,7 +224,7 @@ def write_delete(postid):
     if(not functions.isPlayerLoggedIn()):
         return redirect(url_for('home')) # TODO: Send to 403 instead of home.
         
-    with connect_sql.MySQL() as c:
+    with MySQL() as c:
         c.execute("DELETE FROM posts WHERE post_id=%s", postid)
 
     flash("You have successfully deleted the content", "success")

@@ -2,10 +2,8 @@
 
 from flask import session
 
-from modules import (
-    app, 
-    connect_sql
-)
+from modules import app 
+from modules.connect_sql import MySQL
 
 import pymysql
 
@@ -45,7 +43,7 @@ account_data = {
 
 @app.template_global()
 def retrieveNameFromID(accountid):
-    with connect_sql.MySQL() as c: 
+    with MySQL() as c: 
         c.execute(f"SELECT username FROM accounts WHERE accountid={accountid}")
         result = c.fetchone()
     return result["username"]
@@ -67,7 +65,7 @@ def getItemName(itemid):
 
 @app.template_global()
 def retrieveAdmins():
-    with connect_sql.MySQL() as c:
+    with MySQL() as c:
         c.execute("SELECT userID, adminLevel FROM admins")
         results = c.fetchall()
     return results
