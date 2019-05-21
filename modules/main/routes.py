@@ -52,6 +52,7 @@ def home(page):
     if(session.get("remember_me")):
         session["logged_in"] = True
         return render_template("index.html",
+            active='home',
             pagination=pagination,
             news=result_post,
             admins=retrieveAdmins()
@@ -103,6 +104,7 @@ def home(page):
         flash("Successfully logged in", "success")
     
     return render_template("index.html",
+            active='home',
             pagination=pagination,
             news=result_post,
             admins=retrieveAdmins()
@@ -150,7 +152,8 @@ def dashboard(accountid):
                 item.fk_user_id = {accountid}")
         result_item = c.fetchall()
 
-    return render_template("dashboard.html", 
+    return render_template("dashboard.html",
+        active='dashboard',
         item=result_item, 
         skill=result_skill,
         account=result_account, 

@@ -6,6 +6,7 @@
 
 {% block content %}
     <!-- Title -->
+
     {% if session.get('isAdmin')%}
         <a href="{{ url_for('posts.news_write') }}" class="btn btn-success btn-sm" role="button">Write Post</a>
     {% endif %}
