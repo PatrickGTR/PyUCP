@@ -5,5 +5,5 @@ Back-end: Python
 
 ![preview]
 
-[preview]: https://cdn.discordapp.com/attachments/231799104731217931/578027879170834445/unknown.png
+[preview]: https://media.giphy.com/media/kdWbCt9QlMOJ4VDs4a/giphy.gif
 
