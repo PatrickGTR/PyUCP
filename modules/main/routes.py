@@ -17,6 +17,7 @@ from flask_paginate import (
 import pymysql
 import hashlib
 
+
 from modules.connect_sql import MySQL 
 from modules.config import Config
 
@@ -96,6 +97,7 @@ def home(page):
 
         # if user ticked the box, set the 'remember_me' session to true.
         if request.form.get("checkbox"):
+            session.permanent = True # save session for 31 days, if remember me box is ticked.
             session["remember_me"] = True
         
         # if user logged in, we check in our admin database if they're admin, if they are, set session 'isAdmin' to true

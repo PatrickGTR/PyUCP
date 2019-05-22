@@ -37,12 +37,11 @@ account_data = {
         7: "C-4"
     }
 }
+def sendUserToHome():
+    return redirect(url_for("main.home"))
 
 ## app.template_global allows 
 ## the functions below to be used in our .html files.
-
-def sendUserToHome():
-    return redirect(url_for("main.home"))
 
 @funcs.app_template_global()
 def retrieveNameFromID(accountid):
@@ -75,7 +74,7 @@ def retrieveAdmins():
     
 @funcs.app_template_global()
 def isUserLoggedIn():
-    if(session.get('logged_in') is None):
+    if(session.get('logged_in') == None):
         return False
     else:
         return True
