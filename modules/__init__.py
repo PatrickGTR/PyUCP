@@ -8,11 +8,12 @@ def create_app(config_class=Config):
     from modules.main.routes import main 
     from modules.posts.routes import posts
     from modules.functions import funcs
+    from modules.errors.handler import errors
 
     app.register_blueprint(main)
     app.register_blueprint(posts)
     app.register_blueprint(funcs)
-
+    app.register_blueprint(errors)
     return app
 
 

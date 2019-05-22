@@ -1,6 +1,6 @@
 
 
-from flask import session, Blueprint
+from flask import session, Blueprint, url_for, redirect
 import pymysql
 
 from modules.connect_sql import MySQL
@@ -41,6 +41,9 @@ account_data = {
 ## app.template_global allows 
 ## the functions below to be used in our .html files.
 
+def sendUserToHome():
+    return redirect(url_for("main.home"))
+
 @funcs.app_template_global()
 def retrieveNameFromID(accountid):
     with MySQL() as c: 
@@ -71,7 +74,7 @@ def retrieveAdmins():
     return results
     
 @funcs.app_template_global()
-def isPlayerLoggedIn():
+def isUserLoggedIn():
     if(session.get('logged_in') is None):
         return False
     else:

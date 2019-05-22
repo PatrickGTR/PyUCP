@@ -19,7 +19,7 @@
 
         <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
             <ul class="navbar-nav ml-auto">
-            {% if(isPlayerLoggedIn()) %}
+            {% if(isUserLoggedIn()) %}
                 <li class="nav-item">
                     <a class="nav-link {% if active == 'dashboard' %}navbar-current active{% endif %}" href="{{ url_for('main.dashboard', accountid=session.get('accountid')) }}">Dashboard</a>
                 </li>

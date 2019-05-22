@@ -5,7 +5,8 @@ from flask import (
     url_for,
     redirect,
     flash,
-    Blueprint
+    Blueprint,
+    abort
 )
 
 from flask_paginate import (
@@ -17,13 +18,19 @@ import pymysql
 import hashlib
 
 from modules.connect_sql import MySQL 
-from modules.functions import retrieveAdmins, isPlayerLoggedIn
+from modules.config import Config
+
+from modules.functions import (
+    retrieveAdmins, 
+    isUserLoggedIn, 
+    sendUserToHome
+)
 
 main = Blueprint('main', __name__)
 
 @main.route("/")
 def index():
-    return redirect(url_for("main.home"))
+    return sendUserToHome()
 
 @main.route('/home', 
     defaults={'page': 1}, 
@@ -39,7 +46,9 @@ def home(page):
         c.fetchall()
         num_rows = c.rowcount
 
-    per_page = 3
+    conf = Config()
+
+    per_page = conf.PER_PAGE
     pagination = Pagination(page=1, per_page=per_page, total=num_rows, bs_version=4, alignment="center")
     page, per_page, offset = get_page_args()
                                            
@@ -73,7 +82,7 @@ def home(page):
         # if there is no result returned, we send the user a error message then redirect back to index.html
         if(accResult == None):
             flash("Invalid password or username, please try again.", "danger")
-            return redirect(url_for('main.home'))
+            return sendUserToHome()
 
         # we set retPassword and retSalt variable  to the password and hash we retrieved from the database.
         retPassword, retSalt = accResult["password"], accResult["hash"]
@@ -83,7 +92,7 @@ def home(page):
         # compare password, if password is the same, let the code continue else we return an error message and redirect the user back to index.html
         if password.upper() != retPassword:
             flash("Wrong password, please try again.", "danger")
-            return redirect(url_for('main.home'))
+            return sendUserToHome()
 
         # if user ticked the box, set the 'remember_me' session to true.
         if request.form.get("checkbox"):
@@ -112,6 +121,13 @@ def home(page):
 
 @main.route("/dashboard/<int:accountid>", methods=["GET", "POST"])
 def dashboard(accountid):
+    # if user is not logged in, show him an error message saying he can't access this page.
+    if(not isUserLoggedIn()):
+        return abort(403)
+
+    # if the session accountid is not the same as accountid passed to dashboard param then don't allow this process.
+    if(session.get('accountid') != accountid):
+        return abort(403)
 
     # retrieve players account data
     with MySQL() as c:
@@ -164,4 +180,4 @@ def dashboard(accountid):
 def logout():
     session.clear()
     flash("You have successfully logged out", "success")
-    return redirect(url_for("main.home"))
+    return sendUserToHome()
