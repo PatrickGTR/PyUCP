@@ -29,11 +29,9 @@
         {% endif %}
         <hr>
     {% endfor %}
-        <nav>
-            <ul class="pagination justify-content-center">
-            {% for page in pagination.pages %}
-                <li class="page-item"><a class="page-link" href="{{ url_for('main.home', page=page) }}">{{ page }}</a></li>
-            {% endfor %}
-            </ul>
-        </nav>
-    {% endblock %}
+   
+    
+    {{ pagination.info }}
+    {{ pagination.links }}
+   
+{% endblock %}

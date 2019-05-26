@@ -15,7 +15,12 @@ from modules.functions import (
     sendUserToHome
 )
 
-from modules.connect_sql import MySQL
+from modules.posts.impl import (
+    writePost,
+    editPost,
+    updatePost,
+    deletePost,
+)
 
 posts = Blueprint('posts', __name__)
 
@@ -35,10 +40,7 @@ def news_edit(postid):
     if(not isUserLoggedIn()):
         return abort(403)
 
-    with MySQL() as c:
-        c.execute("SELECT post_id, post_title, post_content FROM posts WHERE post_id = %s", postid)
-        result = c.fetchone()
-
+    result = editPost(postid)
     return render_template("news_edit.html",
         post_data=result,
         admins=retrieveAdmins() 
@@ -54,8 +56,7 @@ def write_success():
     content = request.form.get('news_message')
     author = session.get("accountid") 
 
-    with MySQL() as c:
-       c.execute("INSERT INTO posts (post_title, post_content, post_date, author_id) VALUES (%s, %s, NOW(), %s)", (title, content, author))
+    writePost(title, content, author)
 
     flash("You have successfully posted the content", "success")
     return sendUserToHome()
@@ -68,11 +69,10 @@ def edit_success(postid):
     
     title = request.form.get('news_title') 
     content = request.form.get('news_message')
+
+    updatePost(title, content, postid)
+
     flash("You have successfully edited the content", "success")
-
-    with MySQL() as c:
-        c.execute("UPDATE posts SET post_content=%s, post_title=%s WHERE post_id=%s", (content, title, postid))
-
     return sendUserToHome()
 
 @posts.route("/write_delete/<int:postid>", methods=["GET", "POST"])
@@ -80,9 +80,8 @@ def write_delete(postid):
     # if the user is not logged in, disallow from accessing this link.
     if(not isUserLoggedIn()):
         return abort(403)
-        
-    with MySQL() as c:
-        c.execute("DELETE FROM posts WHERE post_id=%s", postid)
+
+    deletePost(postid)
 
     flash("You have successfully deleted the content", "success")
     return sendUserToHome()

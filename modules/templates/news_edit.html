@@ -8,7 +8,9 @@
 <form action="{{ url_for('posts.edit_success', postid=post_data.post_id) }}" method="POST">
     <div class="card my-4">
         <h5 class="card-header bg-dark text-white">Enter Title</h5>
-        <input class="text-center" type="text" name="news_title" value="{{ post_data.post_title }}"/>
+        <input class="text-center" type="text" name="news_title" value="{{ post_data.post_title }}" required/>
+
+
         <br>
         <br>
 
