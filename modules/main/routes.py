@@ -32,29 +32,25 @@ from modules.main.impl import (
 
 main = Blueprint('main', __name__)
 
+# Redirect user to /home directory.
 @main.route("/")
 def index():
     return sendUserToHome()
 
-@main.route('/home', 
-    defaults={'pageid': 1}, 
-    methods=["GET", "POST"]
-)
-@main.route("/home/<int:pageid>", methods=["GET", "POST"])
-def home(pageid):
+@main.route("/home/", methods=["GET", "POST"])
+def home():
     """ Posts """
 
+    conf = Config()
+
+    per_page = conf.PER_PAGE
+    page, per_page, offset = get_page_args()
 
     with MySQL() as c:
         c.execute("SELECT * FROM posts")
         c.fetchall()
         num_rows = c.rowcount
 
-    conf = Config()
-
-    per_page = conf.PER_PAGE
-    page, per_page, offset = get_page_args()
-    
     pagination = Pagination(page=page, per_page=per_page, total=num_rows, bs_version=4, alignment="center")
                                            
     with MySQL() as c:
