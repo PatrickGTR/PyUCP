@@ -1,6 +1,6 @@
 from flask import (
-    session, 
-    flash, 
+    session,
+    flash,
     request
 )
 
@@ -9,24 +9,28 @@ from modules.functions import (
     setUserLoggedIn
 )
 
-from modules.connect_sql import MySQL 
+from modules.connect_sql import MySQL
 import hashlib
 
 def retrieveUserData(accountid: int):
     # retrieve player account data
     with MySQL() as c:
-        c.execute(f"""SELECT *,
-            DATE_FORMAT(registerdate, '%d %M %Y') as reg_date,
-            DATE_FORMAT(lastlogin, '%d, %M, %Y at %r') as last_log
+        c.execute(
+        """
+        SELECT *,
+            DATE_FORMAT(registerdate, "%%d %%M %%Y") as reg_date,
+            DATE_FORMAT(lastlogin, "%%d, %%M, %%Y at %%r") as last_log
         FROM
             accounts
         WHERE
-            accountID={accountid}""")
+            accountID = %s
+        """, (accountid))
         account = c.fetchone()
-    
+
     # retrieve player skill data
     with MySQL() as c:
-        c.execute(f"""
+        c.execute(
+            """
             SELECT
                 type.skill_id, type.skill_name, IFNULL(skill.value, 0) as value
             FROM
@@ -35,12 +39,14 @@ def retrieveUserData(accountid: int):
                 skills_player AS skill
             ON
                 skill.fk_skill_id = type.skill_id AND
-                skill.fk_user_id = {accountid}""")
+                skill.fk_user_id = %s
+            """, (accountid))
         skill = c.fetchall()
-    
+
     # retrieve player item data
     with MySQL() as c:
-        c.execute(f"""
+        c.execute(
+            """
             SELECT
                 type.item_id, type.item_name, IFNULL(item.value, 0) as value
             FROM
@@ -49,7 +55,8 @@ def retrieveUserData(accountid: int):
                 item_players AS item
             ON
                 item.fk_item_id = type.item_id AND
-                item.fk_user_id = {accountid}""")
+                item.fk_user_id = %s
+            """, (accountid))
         item = c.fetchall()
         return account, skill, item
 
