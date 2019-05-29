@@ -6,9 +6,10 @@ def writePost(title: str, content: str, author: int):
     
 def editPost(postid: int):
     with MySQL() as c:
-        c.execute("SELECT post_id, post_title, post_content FROM posts WHERE post_id = %s", postid)
+        c.execute("SELECT post_id, post_title, post_content FROM posts WHERE post_id = %s", (postid))
         result = c.fetchone()
     # returns the first result from the database.
+    print(result)
     return result
 
 def updatePost(content: str, title: str, postid: int):
@@ -17,5 +18,5 @@ def updatePost(content: str, title: str, postid: int):
 
 def deletePost(postid: int):
     with MySQL() as c:
-        c.execute("DELETE FROM posts WHERE post_id=%s", postid)
+        c.execute("DELETE FROM posts WHERE post_id=%s", (postid))
     

@@ -15,41 +15,41 @@ import hashlib
 def retrieveUserData(accountid: int):
     # retrieve player account data
     with MySQL() as c:
-        c.execute(f"SELECT *,  \
-            DATE_FORMAT(registerdate, '%d %M %Y') as reg_date, \
-            DATE_FORMAT(lastlogin, '%d, %M, %Y at %r') as last_log \
-        FROM \
-            accounts \
-        WHERE \
-            accountID={accountid}")
+        c.execute(f"""SELECT *,
+            DATE_FORMAT(registerdate, '%d %M %Y') as reg_date,
+            DATE_FORMAT(lastlogin, '%d, %M, %Y at %r') as last_log
+        FROM
+            accounts
+        WHERE
+            accountID={accountid}""")
         account = c.fetchone()
     
     # retrieve player skill data
     with MySQL() as c:
-        c.execute(f"\
-            SELECT \
-                type.skill_id, type.skill_name, IFNULL(skill.value, 0) as value \
-            FROM \
-                skills_type AS type \
-            LEFT JOIN \
-                skills_player AS skill \
-            ON \
-                skill.fk_skill_id = type.skill_id AND \
-                skill.fk_user_id = {accountid}")
+        c.execute(f"""
+            SELECT
+                type.skill_id, type.skill_name, IFNULL(skill.value, 0) as value
+            FROM
+                skills_type AS type
+            LEFT JOIN
+                skills_player AS skill
+            ON
+                skill.fk_skill_id = type.skill_id AND
+                skill.fk_user_id = {accountid}""")
         skill = c.fetchall()
     
     # retrieve player item data
     with MySQL() as c:
-        c.execute(f"\
-            SELECT \
-                type.item_id, type.item_name, IFNULL(item.value, 0) as value \
-            FROM \
-                item_type AS type \
-            LEFT JOIN \
-                item_players AS item \
-            ON \
-                item.fk_item_id = type.item_id AND \
-                item.fk_user_id = {accountid}")
+        c.execute(f"""
+            SELECT
+                type.item_id, type.item_name, IFNULL(item.value, 0) as value
+            FROM
+                item_type AS type
+            LEFT JOIN
+                item_players AS item
+            ON
+                item.fk_item_id = type.item_id AND
+                item.fk_user_id = {accountid}""")
         item = c.fetchall()
         return account, skill, item
 
