@@ -38,7 +38,8 @@ def retrieveUserData(accountid: int):
             LEFT JOIN
                 skills_player AS skill
             ON
-                skill.fk_skill_id = type.skill_id AND
+                skill.fk_skill_id = type.skill_id
+            AND
                 skill.fk_user_id = %s
             """, (accountid))
         skill = c.fetchall()
@@ -54,7 +55,8 @@ def retrieveUserData(accountid: int):
             LEFT JOIN
                 item_players AS item
             ON
-                item.fk_item_id = type.item_id AND
+                item.fk_item_id = type.item_id
+            AND
                 item.fk_user_id = %s
             """, (accountid))
         item = c.fetchall()
