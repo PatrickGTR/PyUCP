@@ -40,7 +40,7 @@ def retrieveUserData(accountid: int):
             ON
                 skill.fk_skill_id = type.skill_id
             AND
-                skill.fk_user_id = %s
+                skill.fk_account_id = %s
             """, (accountid))
         skill = c.fetchall()
 
@@ -57,16 +57,16 @@ def retrieveUserData(accountid: int):
             ON
                 item.fk_item_id = type.item_id
             AND
-                item.fk_user_id = %s
+                item.fk_account_id = %s
             """, (accountid))
         item = c.fetchall()
         return account, skill, item
 
 
 def loginUser(username: str, password: str):
-    # run query, retrieve the accountID, password and hash from username variable.
+    # run query, retrieve the accountID, password and salt from username variable.
     with MySQL() as c:
-        c.execute("SELECT accountID, password, hash FROM accounts WHERE username = %s", username)
+        c.execute("SELECT accountID, password, salt FROM accounts WHERE username = %s", username)
         accResult = c.fetchone()
 
     # if there is no result returned, we send the user a error message then redirect back to index.html
@@ -75,7 +75,7 @@ def loginUser(username: str, password: str):
         return sendUserToHome()
 
     # we set retPassword and retSalt variable  to the password and hash we retrieved from the database.
-    retPassword, retSalt = accResult["password"], accResult["hash"]
+    retPassword, retSalt = accResult["password"], accResult["salt"]
     # password variable will be sha256 hash and salt concatted together.
     password = hashlib.sha256(password.encode() + retSalt.encode()).hexdigest()
 
