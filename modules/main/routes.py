@@ -11,23 +11,23 @@ from flask import (
 
 from struct import unpack
 
-from flask_paginate import ( 
-    Pagination, 
+from flask_paginate import (
+    Pagination,
     get_page_args
 )
 
-from modules.connect_sql import MySQL 
+from modules.connect_sql import MySQL
 from modules.config import Config
 
 from modules.functions import (
-    retrieveAdmins, 
-    isUserLoggedIn, 
+    retrieveAdmins,
+    isUserLoggedIn,
     sendUserToHome,
     getItemName,
     setUserLoggedIn
 )
 
-from modules.main.impl import ( 
+from modules.main.impl import (
     loginUser,
     retrieveUserData
 )
@@ -54,10 +54,10 @@ def home():
         num_rows = c.rowcount
 
     pagination = Pagination(page=page, per_page=per_page, total=num_rows, bs_version=4, alignment="center")
-                                           
+
     with MySQL() as c:
         c.execute(f"SELECT post_id, post_title, post_content, DATE_FORMAT(post_date, '%d, %M, %Y at %h:%i %p') as post_date, author_id FROM posts ORDER BY post_id DESC LIMIT {offset}, {per_page}")
-        result_post = c.fetchall() 
+        result_post = c.fetchall()
 
     """ Account """
     # if user has ticked remember_me before, we set its session login to true and stop executing the code below.
@@ -101,9 +101,9 @@ def dashboard(accountid):
 
     return render_template("dashboard.html",
         active='dashboard',
-        account=result_account, 
+        account=result_account,
         skill=result_skill,
-        item=result_item, 
+        item=result_item,
         admins=retrieveAdmins()
     )
 
@@ -111,8 +111,39 @@ def dashboard(accountid):
 def logout():
     # if user is not logged in, show him an error message saying he can't access this page.
     if(not isUserLoggedIn()):
-        return abort(403) 
-        
+        return abort(403)
+
     session.clear()
     flash("You have successfully logged out", "success")
     return sendUserToHome()
+
+@main.route("/search", methods=["GET"])
+def search():
+    if(request.method == "GET"):
+        username = request.args.get("search")
+
+        if(username == None):
+            return render_template("search.html",
+                username=username,
+                active='search',
+                admins=retrieveAdmins()
+            )
+
+        with MySQL() as c:
+            c.execute("SELECT accountID FROM accounts WHERE username = %s", username)
+            result = c.fetchone()
+
+        if(result == None):
+            flash("Invalid username, please try again.","danger")
+            return redirect(url_for("main.search"))
+
+        result_account, result_skill, result_item = retrieveUserData(result['accountID'])
+
+
+    return render_template("search.html",
+        active='search',
+        account=result_account,
+        skill=result_skill,
+        item=result_item,
+        admins=retrieveAdmins()
+    )

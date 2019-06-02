@@ -59,21 +59,21 @@
     </div>
 </div>
 <div class="card my-4">
-        <h5 class="card-header bg-dark text-white">Skills</h5>
-        <div class="card-body">
-            <table class="table text-center table-bordered">
+    <h5 class="card-header bg-dark text-white">Skills</h5>
+    <div class="card-body">
+        <table class="table text-center table-bordered">
 
-                <thead>
-                    {% for items in item %}
-                        <th>{{ getItemName(items.item_id) }}</th>
-                    {% endfor %}
-                </thead>
-                <tr>
-                    {% for items in item %}
-                        <td>{{ items.value }}</td>
-                    {% endfor %}
-                </tr>
-            </table>
-        </div>
+            <thead>
+                {% for items in item %}
+                    <th>{{ getItemName(items.item_id) }}</th>
+                {% endfor %}
+            </thead>
+            <tr>
+                {% for items in item %}
+                    <td>{{ items.value }}</td>
+                {% endfor %}
+            </tr>
+        </table>
     </div>
+</div>
 {% endblock %}

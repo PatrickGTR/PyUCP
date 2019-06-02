@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+{% block title %}
+Search
+{% endblock %}
+
+{% block content %}
+
+<h3>Username</h3>
+<p>Insert the username of the player to see their statistics</p>
+
+<div class="text-center">
+    <form action="{{url_for('main.search')}}" method="GET">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text "><i class="fas fa-user"></i></span>
+                </div>
+                <input type="text" name="search" class="form-control" placeholder="Username" required>
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </div>
+    </form>
+</div>
+    {% if username != None %}
+    <div class="card my-4">
+        <h5 class="card-header bg-dark text-white">{{ account.username }}'s Statistics</h5>
+        <div class="card-body">
+            <table class="table table-striped">
+                <tr>
+                    <td>AccountID:</td>
+                    <td>{{ account.accountID }}</td>
+                </tr>
+                <tr>
+                    <td>Username:</td>
+                    <td>{{ account.username }}</td>
+                </tr>
+                <tr>
+                    <td>Register Date</td>
+                    <td>{{ account.reg_date}}</td>
+                </tr>
+                <tr>
+                    <td>Last Login</td>
+                    <td>{{ account.last_log }}</td>
+                </tr>
+                <tr>
+                    <td>Money:</td>
+                    <td>${{ account.money }}</td>
+                </tr>
+                <tr>
+                    <td>Kills:</td>
+                    <td>{{ account.kills }}</td>
+                </tr>
+                <tr>
+                    <td>Deaths:</td>
+                    <td>{{ account.deaths }}</td>
+                </tr>
+                <tr>
+                    <td>Job:</td>
+                    <td>{{ getJobName(account.jobID) }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="card my-4">
+        <h5 class="card-header bg-dark text-white">Skills</h5>
+        <div class="card-body">
+            <table class="table table-striped">
+                {% for skills in skill %}
+                <tr>
+                    <td>{{ getSkillName(skills.skill_id) }}:</td>
+                    <td>{{ skills.value }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="card my-4">
+        <h5 class="card-header bg-dark text-white">Skills</h5>
+        <div class="card-body">
+            <table class="table text-center table-bordered">
+
+                <thead>
+                    {% for items in item %}
+                        <th>{{ getItemName(items.item_id) }}</th>
+                    {% endfor %}
+                </thead>
+                <tr>
+                    {% for items in item %}
+                        <td>{{ items.value }}</td>
+                    {% endfor %}
+                </tr>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
+
