@@ -87,7 +87,7 @@ def home():
             admins=retrieveAdmins()
         )
 
-@main.route("/dashboard/<int:accountid>", methods=["GET"])
+@main.route("/dashboard/<int:accountid>", methods=["GET", "POST"])
 def dashboard(accountid):
     # if user is not logged in, show him an error message saying he can't access this page.
     if(not isUserLoggedIn()):
@@ -117,7 +117,7 @@ def logout():
     flash("You have successfully logged out", "success")
     return sendUserToHome()
 
-@main.route("/search", methods=["GET"])
+@main.route("/search", methods=["GET", "POST"])
 def search():
     if(request.method == "GET"):
         username = request.args.get("search")
@@ -139,11 +139,19 @@ def search():
 
         result_account, result_skill, result_item = retrieveUserData(result['accountID'])
 
+        return render_template("search.html",
+            active='search',
+            account=result_account,
+            skill=result_skill,
+            item=result_item,
+            admins=retrieveAdmins()
+        )
+    if(request.method == "POST"):
+        # set username variable to form input.
+        # set password variable to password input.
+        username = request.form.get("username")
+        password = request.form.get("password")
 
-    return render_template("search.html",
-        active='search',
-        account=result_account,
-        skill=result_skill,
-        item=result_item,
-        admins=retrieveAdmins()
-    )
+        loginUser(username, password)
+        flash("Successfully logged in", "success")
+    return redirect(url_for("main.search"));
