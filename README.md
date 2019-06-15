@@ -40,4 +40,9 @@ pip install -r requirements.txt
 ```
 
 ## Live Demo
-[Take me there!](https://ucpdemo.herokuapp.com)
+
+**Login: demo
+Password: demo**
+
+
+####[Take me there now!](https://ucpdemo.herokuapp.com)
