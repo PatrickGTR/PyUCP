@@ -101,3 +101,4 @@ def loginUser(username: str, password: str):
     # if none of the error code above occured, set the session 'logged_in' to true and 'accountid' to the accountID from the database, show message to user that he logged in.
     setUserLoggedIn(True)
     session["accountid"] = accResult["accountID"]
+    flash("Successfully logged in", "success")

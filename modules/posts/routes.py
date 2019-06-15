@@ -46,7 +46,7 @@ def news_edit(postid):
         admins=retrieveAdmins()
     )
 
-@posts.route("/write_success", methods=["GET", "POST"])
+@posts.route("/write_success", methods=["POST"])
 def write_success():
     # if the user is not logged in, disallow from accessing this link.
     if(not isUserLoggedIn()):

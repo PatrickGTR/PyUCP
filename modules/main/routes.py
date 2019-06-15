@@ -78,8 +78,6 @@ def home():
         password = request.form.get("password")
 
         loginUser(username, password)
-        flash("Successfully logged in", "success")
-
     return render_template("index.html",
             active='home',
             pagination=pagination,
