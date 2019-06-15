@@ -2,13 +2,14 @@
 This website is build using **Bootstrap** framework, **Python** and **MySQL**.
 
 ## Installation
-####Importrant!
+#### Importrant!
 Make sure you create environment variables for secret_key and MySQL credentials for the **login** and **content management system** to work properly.
-####How to install environment variables
-####Windows
+
+#### How to install environment variables
+#### Windows
 [Take me there!](https://www.computerhope.com/issues/ch000549.htm)
 
-####Linux
+#### Linux
 Creating Environment Variable
 ```bash
 VARIABLE_NAME = variable_value
@@ -31,10 +32,10 @@ MYSQL_DATABASE  = os.environ.get('MYSQL_DATABASE')
 MYSQL_HOST      = os.environ.get('MYSQL_HOST')
 ```
 
-#####Python Version
+##### Python Version
 3.7.3
 
-#####Install dependencies in one line!
+##### Install dependencies in one line!
 ```bash
 pip install -r requirements.txt
 ```
@@ -45,4 +46,4 @@ pip install -r requirements.txt
 Password: demo**
 
 
-####[Take me there now!](https://ucpdemo.herokuapp.com)
+#### [Take me there now!](https://ucpdemo.herokuapp.com)
