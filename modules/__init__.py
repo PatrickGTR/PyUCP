@@ -7,7 +7,7 @@ def create_app(config_class=Config):
     app.config.from_object(Config)
 
     # Include the blueprint modules
-    from modules.main.routes import main 
+    from modules.main.routes import main
     from modules.posts.routes import posts
     from modules.functions import funcs
     from modules.errors.handler import errors
@@ -18,7 +18,6 @@ def create_app(config_class=Config):
     app.register_blueprint(funcs)
     app.register_blueprint(errors)
     return app
-
 
 
 

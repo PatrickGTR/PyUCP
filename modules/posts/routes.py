@@ -1,17 +1,17 @@
 from flask import (
-    render_template, 
-    redirect, 
-    url_for, 
+    render_template,
+    redirect,
+    url_for,
     session,
-    request, 
-    flash, 
-    Blueprint, 
+    request,
+    flash,
+    Blueprint,
     abort
 )
 
 from modules.functions import (
-    isUserLoggedIn, 
-    retrieveAdmins, 
+    isUserLoggedIn,
+    retrieveAdmins,
     sendUserToHome
 )
 
@@ -30,7 +30,7 @@ def news_write():
     if(not isUserLoggedIn()):
         return abort(403)
 
-    return render_template("news_write.html", 
+    return render_template("news_write.html",
         admins=retrieveAdmins()
     )
 
@@ -43,7 +43,7 @@ def news_edit(postid):
     result = editPost(postid)
     return render_template("news_edit.html",
         post_data=result,
-        admins=retrieveAdmins() 
+        admins=retrieveAdmins()
     )
 
 @posts.route("/write_success", methods=["GET", "POST"])
@@ -52,9 +52,9 @@ def write_success():
     if(not isUserLoggedIn()):
         return abort(403)
 
-    title = request.form.get('news_title') 
+    title = request.form.get('news_title')
     content = request.form.get('news_message')
-    author = session.get("accountid") 
+    author = session.get("accountid")
 
     writePost(title, content, author)
 
@@ -66,8 +66,8 @@ def edit_success(postid):
     # if the user is not logged in, disallow from accessing this link.
     if(not isUserLoggedIn()):
         return abort(403)
-    
-    title = request.form.get('news_title') 
+
+    title = request.form.get('news_title')
     content = request.form.get('news_message')
 
     updatePost(title, content, postid)
