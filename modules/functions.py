@@ -12,7 +12,7 @@ account_data = {
         0: "Drug Dealer",
         1: "Weapon Dealer",
         2: "Hitman",
-        3: "Terrorist", 
+        3: "Terrorist",
         4: "Rapist",
         5: "Mechanic"
     },
@@ -38,35 +38,35 @@ account_data = {
     }
 }
 def sendUserToHome():
-    return redirect(url_for("main.home"))
+    return redirect(url_for("main.index"))
 
 def setUserLoggedIn(status: bool):
     session['logged_in'] = status
 
-## app.template_global allows 
+## app.template_global allows
 ## the functions below to be used in our .html files.
 
 @funcs.app_template_global()
 def retrieveNameFromID(accountid):
-    with MySQL() as c: 
+    with MySQL() as c:
         c.execute(f"SELECT username FROM accounts WHERE accountid={accountid}")
-        result = c.fetchone()   
-    return result["username"] 
+        result = c.fetchone()
+    return result["username"]
 
 @funcs.app_template_global()
 def getJobName(jobid):
-    jobName = account_data.get("jobs").get(jobid) 
-    return jobName 
+    jobName = account_data.get("jobs").get(jobid)
+    return jobName
 
 @funcs.app_template_global()
 def getSkillName(skillid):
-    skillName = account_data.get("skills").get(skillid) 
-    return skillName 
+    skillName = account_data.get("skills").get(skillid)
+    return skillName
 
 @funcs.app_template_global()
 def getItemName(itemid):
-    itemName = account_data.get("items").get(itemid) 
-    return itemName 
+    itemName = account_data.get("items").get(itemid)
+    return itemName
 
 @funcs.app_template_global()
 def retrieveAdmins():
@@ -74,7 +74,7 @@ def retrieveAdmins():
         c.execute("SELECT userID, adminLevel FROM admins")
         results = c.fetchall()
     return results
-    
+
 @funcs.app_template_global()
 def isUserLoggedIn():
     if(session.get('logged_in') == None):

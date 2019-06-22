@@ -42,8 +42,8 @@ pip install -r requirements.txt
 
 ## Live Demo
 
-**Login: demo
-Password: demo**
+**Login: demo**
+**Password: demo**
 
 
 #### [Take me there now!](https://ucpdemo.herokuapp.com)

@@ -71,8 +71,9 @@ def loginUser(username: str, password: str):
 
     # if there is no result returned, we send the user a error message then redirect back to index.html
     if(accResult == None):
-        flash("Invalid password or username, please try again.", "danger")
-        return sendUserToHome()
+        return 0
+        ##flash("Invalid password or username, please try again.", "danger")
+        ##return sendUserToHome()
 
     # we set retPassword and retSalt variable  to the password and hash we retrieved from the database.
     retPassword, retSalt = accResult["password"], accResult["salt"]
@@ -81,8 +82,9 @@ def loginUser(username: str, password: str):
 
     # compare password, if password is the same, let the code continue else we return an error message and redirect the user back to index.html
     if password.upper() != retPassword:
-        flash("Wrong password, please try again.", "danger")
-        return sendUserToHome()
+        return 1
+        ##flash("Wrong password, please try again.", "danger")
+        ##return sendUserToHome()
 
     # if user ticked the box, set the 'remember_me' session to true.
     if request.form.get("checkbox"):
@@ -101,4 +103,4 @@ def loginUser(username: str, password: str):
     # if none of the error code above occured, set the session 'logged_in' to true and 'accountid' to the accountID from the database, show message to user that he logged in.
     setUserLoggedIn(True)
     session["accountid"] = accResult["accountID"]
-    flash("Successfully logged in", "success")
+    return 2

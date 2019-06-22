@@ -2,13 +2,12 @@
 <div class="card my-4">
     <h5 class="card-header bg-dark text-white">Account</h5>
     <div class="card-body">
-        <form action="" method="POST">
             <!-- Username start -->
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text "><i class="fas fa-user"></i></span>
                 </div>
-                <input type="text" name="username" class="form-control" placeholder="Username" required>
+                <input type="text" name="username" id="username" class="form-control" placeholder="Username" required>
             </div>
             <!-- Username end -->
             <!-- Password start -->
@@ -16,14 +15,40 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text "><i class="fas fa-key"></i></span>
                 </div>
-                <input type="password" name="password" class="form-control" placeholder="Password" required>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
             </div>
+            <span class="error-msg" id="error"></span>
             <!-- Password end -->
             <div class="checkbox">
-                <label><input type="checkbox" name="checkbox"/> Remember me</label>
+                <label><input type="checkbox" name="checkbox"/> Remember me </label>
+                <a style="float:right;" href="samp://127.0.0.1">Not a member?</a>
             </div>
             <button class="btn btn-dark" type="submit">Sign in</button>
-        </form>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("button").click(function(){
+
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            $.post("{{ url_for('main.index') }}",
+            {
+                username: username,
+                password: password
+            },
+            function(data, status) {
+                if(data.success) {
+                    window.location.reload();
+                }
+                if(!data.success) {
+                    $("#error").text(data.error_msg).fadeIn(250).delay(3000).fadeOut(250);
+                    return;
+                }
+            }, "json");
+        });
+    });
+</script>
 {% endif %}

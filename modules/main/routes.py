@@ -6,7 +6,8 @@ from flask import (
     redirect,
     flash,
     Blueprint,
-    abort
+    abort,
+    jsonify
 )
 
 from struct import unpack
@@ -35,12 +36,8 @@ from modules.main.impl import (
 main = Blueprint('main', __name__)
 
 # Redirect user to /home directory.
-@main.route("/")
+@main.route("/", methods=["GET", "POST"])
 def index():
-    return sendUserToHome()
-
-@main.route("/home/", methods=["GET", "POST"])
-def home():
     """ Posts """
 
     conf = Config()
@@ -71,13 +68,23 @@ def home():
         )
 
     # if the method we get is not post, we send the user back to index.html
+
     if(request.method == "POST"):
         # set username variable to form input.
         # set password variable to password input.
         username = request.form.get("username")
         password = request.form.get("password")
 
-        loginUser(username, password)
+        ret = loginUser(username, password)
+
+        if(ret == 0):
+            return jsonify(success=False, error_msg="Invalid username, please try again.")
+        elif(ret == 1):
+            return jsonify(success=False, error_msg="Wrong password, please try again.")
+        if(ret == 2):
+            flash("You have  successfully logged in", "success")
+            return jsonify(success=True)
+
     return render_template("index.html",
             active='home',
             pagination=pagination,
@@ -115,7 +122,7 @@ def logout():
     flash("You have successfully logged out", "success")
     return sendUserToHome()
 
-@main.route("/search", methods=["GET", "POST"])
+@main.route("/search", methods=["GET"])
 def search():
     if(request.method == "GET"):
         username = request.args.get("search")
@@ -144,12 +151,3 @@ def search():
             item=result_item,
             admins=retrieveAdmins()
         )
-    if(request.method == "POST"):
-        # set username variable to form input.
-        # set password variable to password input.
-        username = request.form.get("username")
-        password = request.form.get("password")
-
-        loginUser(username, password)
-        flash("Successfully logged in", "success")
-    return redirect(url_for("main.search"));

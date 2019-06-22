@@ -24,3 +24,8 @@ footer {
   width: 100%;
   overflow: hidden;
 }
+
+.error-msg {
+  color: red;
+  font-weight: bold;
+}
