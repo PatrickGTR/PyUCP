@@ -4,21 +4,42 @@ Search
 {% endblock %}
 
 {% block content %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#search").keyup(function() {
+            $("#listplayers").html(""); // clear data ready for appending.
+
+            var value = $("#search").val(); // take data from search input.
+            if(value) { // if value is not null run the code below.
+                $.get("{{ url_for('main.searchAPI') }}", { // send a get request
+                    username: value
+                },
+                function(data, status) {
+                    $("#listplayers").html(""); // clear data ready for appending.
+                    const iterator = data.username.values();
+                    for (const value of iterator) {
+                            $("#listplayers")
+                                .append("<ul><li class='list-group-item'><a href='./"+ value +"'>" + value + "</a></li></ul>");
+                    }
+                });
+            }
+        });
+    });
+</script>
 
 <h3>Username</h3>
 <p>Insert the username of the player to see their statistics</p>
 
 <div class="text-center">
-    <form action="{{url_for('main.search')}}" method="GET">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text "><i class="fas fa-user"></i></span>
-                </div>
-                <input type="search" name="search" class="form-control" placeholder="Username" required>
-            </div>
-    </form>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text "><i class="fas fa-user"></i></span>
+        </div>
+        <input type="search" name="search" id="search" class="form-control" placeholder="Username" required>
+    </div>
+    <div class="list-group" id="listplayers"></div>
 </div>
-    {% if username != None %}
+{% if username != None %}
     <div class="card my-4">
         <h5 class="card-header bg-dark text-white">{{ account.username }}'s Statistics</h5>
         <div class="card-body">
@@ -89,6 +110,6 @@ Search
             </table>
         </div>
     </div>
-    {% endif %}
+{% endif %}
 {% endblock %}
 

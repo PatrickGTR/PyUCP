@@ -34,7 +34,7 @@
 </div>
 
 <!-- Page Content start -->
-<div class="container">
+<div class="container" id="sidebar">
     {% include "includes/messages.html" %}
     <div class="row">
         <!-- Post Content Column start-->
@@ -78,10 +78,6 @@
 <script>
     // Timer Notification Message, fade out in 2.5 seconds after shown.
     $('.alert').delay(2500).fadeOut(300);
-    // Summer Note
-    $(document).ready(function() {
-        $('#summernote').summernote();
-    });
 </script>
 
 </body>

@@ -25,7 +25,8 @@ from modules.functions import (
     isUserLoggedIn,
     sendUserToHome,
     getItemName,
-    setUserLoggedIn
+    setUserLoggedIn,
+    retrieveNameFromID
 )
 
 from modules.main.impl import (
@@ -122,32 +123,48 @@ def logout():
     flash("You have successfully logged out", "success")
     return sendUserToHome()
 
-@main.route("/search", methods=["GET"])
-def search():
+@main.route("/searchAPI", methods=["GET"])
+def searchAPI():
     if(request.method == "GET"):
-        username = request.args.get("search")
-
-        if(username == None):
-            return render_template("search.html",
-                username=username,
-                active='search',
-                admins=retrieveAdmins()
-            )
+        username = request.args.get("username")
 
         with MySQL() as c:
-            c.execute("SELECT accountID FROM accounts WHERE username = %s", username)
-            result = c.fetchone()
+            query = "SELECT accountID FROM accounts WHERE username LIKE %s"
+            param = f"%{username}%"
+            c.execute(query, param)
 
-        if(result == None):
-            flash("Invalid username, please try again.","danger")
-            return redirect(url_for("main.search"))
+            result = c.fetchall()
 
-        result_account, result_skill, result_item = retrieveUserData(result['accountID'])
+            if not (result):
+                return jsonify(username="null")
 
+            usernames = []
+            for row in result:
+                usernames.append(retrieveNameFromID(row['accountID']))
+            return jsonify(username=usernames)
+
+
+
+@main.route("/search/", defaults={'username': None})
+@main.route("/search/<username>")
+def search(username):
+    if(username == None):
         return render_template("search.html",
+            username=username,
             active='search',
-            account=result_account,
-            skill=result_skill,
-            item=result_item,
             admins=retrieveAdmins()
         )
+
+    with MySQL() as c:
+        c.execute("SELECT accountID FROM accounts WHERE username = %s", username)
+        result = c.fetchone()
+
+    result_account, result_skill, result_item = retrieveUserData(result['accountID'])
+
+    return render_template("search.html",
+        active='search',
+        account=result_account,
+        skill=result_skill,
+        item=result_item,
+        admins=retrieveAdmins()
+    )

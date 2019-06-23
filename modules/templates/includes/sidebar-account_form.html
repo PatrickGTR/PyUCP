@@ -30,9 +30,9 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $("button").click(function(){
-
-            var username = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
+            // store element id of username and password to variable.
+            var username = $("#username").val();
+            var password = $("#password").val();
 
             $.post("{{ url_for('main.index') }}",
             {
@@ -40,9 +40,15 @@
                 password: password
             },
             function(data, status) {
+                // reload page.
+                // allows the server-side settings to load.
+                // e.g admin perms, seeing dashboard navbar.
                 if(data.success) {
-                    window.location.reload();
+                    location.reload(true);
                 }
+                // show error
+                // username not found.
+                // entered wrong password
                 if(!data.success) {
                     $("#error").text(data.error_msg).fadeIn(250).delay(3000).fadeOut(250);
                     return;
